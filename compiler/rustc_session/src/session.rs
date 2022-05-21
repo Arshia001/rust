@@ -672,11 +672,10 @@ impl Session {
     }
 
     pub fn is_wasi_reactor(&self) -> bool {
-        self.target.options.os == "wasi"
-            && matches!(
-                self.opts.unstable_opts.wasi_exec_model,
-                Some(config::WasiExecModel::Reactor)
-            )
+        (self.target.options.os == "wasi" || self.target.options.os == "wasix")  && matches!(
+            self.opts.unstable_opts.wasi_exec_model,
+            Some(config::WasiExecModel::Reactor)
+        )
     }
 
     /// Returns `true` if the target can use the current split debuginfo configuration.
