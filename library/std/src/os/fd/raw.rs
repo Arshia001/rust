@@ -9,7 +9,7 @@ use crate::os::raw;
 use crate::os::unix::io::AsFd;
 #[cfg(unix)]
 use crate::os::unix::io::OwnedFd;
-#[cfg(any(target_os = "wasi", target_os = "wasix"))]
+#[cfg(target_os = "wasi")]
 use crate::os::wasi::io::OwnedFd;
 use crate::sys_common::{AsInner, IntoInner};
 
@@ -42,12 +42,12 @@ pub trait AsRawFd {
     /// ```no_run
     /// use std::fs::File;
     /// # use std::io;
-    /// #[cfg(any(unix, target_os = "wasi", target_os = "wasix"))]
+    /// #[cfg(any(unix, target_os = "wasi"))]
     /// use std::os::fd::{AsRawFd, RawFd};
     ///
     /// let mut f = File::open("foo.txt")?;
     /// // Note that `raw_fd` is only valid as long as `f` exists.
-    /// #[cfg(any(unix, target_os = "wasi", target_os = "wasix"))]
+    /// #[cfg(any(unix, target_os = "wasi"))]
     /// let raw_fd: RawFd = f.as_raw_fd();
     /// # Ok::<(), io::Error>(())
     /// ```
@@ -81,15 +81,15 @@ pub trait FromRawFd {
     /// ```no_run
     /// use std::fs::File;
     /// # use std::io;
-    /// #[cfg(any(unix, target_os = "wasi", target_os = "wasix"))]
+    /// #[cfg(any(unix, target_os = "wasi"))]
     /// use std::os::fd::{FromRawFd, IntoRawFd, RawFd};
     ///
     /// let f = File::open("foo.txt")?;
-    /// # #[cfg(any(unix, target_os = "wasi", target_os = "wasix"))]
+    /// # #[cfg(any(unix, target_os = "wasi"))]
     /// let raw_fd: RawFd = f.into_raw_fd();
     /// // SAFETY: no other functions should call `from_raw_fd`, so there
     /// // is only one owner for the file descriptor.
-    /// # #[cfg(any(unix, target_os = "wasi", target_os = "wasix"))]
+    /// # #[cfg(any(unix, target_os = "wasi"))]
     /// let f = unsafe { File::from_raw_fd(raw_fd) };
     /// # Ok::<(), io::Error>(())
     /// ```
@@ -117,11 +117,11 @@ pub trait IntoRawFd {
     /// ```no_run
     /// use std::fs::File;
     /// # use std::io;
-    /// #[cfg(any(unix, target_os = "wasi", target_os = "wasix"))]
+    /// #[cfg(any(unix, target_os = "wasi"))]
     /// use std::os::fd::{IntoRawFd, RawFd};
     ///
     /// let f = File::open("foo.txt")?;
-    /// #[cfg(any(unix, target_os = "wasi", target_os = "wasix"))]
+    /// #[cfg(any(unix, target_os = "wasi"))]
     /// let raw_fd: RawFd = f.into_raw_fd();
     /// # Ok::<(), io::Error>(())
     /// ```
