@@ -8,7 +8,7 @@ use crate::fmt;
 use crate::fs;
 use crate::marker::PhantomData;
 use crate::mem::forget;
-#[cfg(not(any(target_arch = "wasm32", target_arch = "wasm64", target_env = "sgx")))]
+#[cfg(not(any(target_family = "wasm", target_env = "sgx")))]
 use crate::sys::cvt;
 use crate::sys_common::{AsInner, FromInner, IntoInner};
 
