@@ -1,4 +1,5 @@
 #![deny(unsafe_op_in_unsafe_fn)]
+#![allow(unused_imports)]
 
 use super::fd::WasiFd;
 use crate::ffi::{CStr, OsStr, OsString};
