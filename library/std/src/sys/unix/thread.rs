@@ -1,3 +1,4 @@
+#![cfg_attr(target_vendor = "wasmer", allow(dead_code))]
 use crate::cmp;
 use crate::ffi::CStr;
 use crate::io;
@@ -242,6 +243,7 @@ impl Thread {
         target_env = "newlib",
         target_os = "l4re",
         target_os = "emscripten",
+        target_os = "wasi",
         target_os = "redox",
         target_os = "vxworks"
     ))]
@@ -319,6 +321,7 @@ pub fn available_parallelism() -> io::Result<NonZeroUsize> {
         if #[cfg(any(
             target_os = "android",
             target_os = "emscripten",
+            target_os = "wasi",
             target_os = "fuchsia",
             target_os = "ios",
             target_os = "linux",
