@@ -184,13 +184,8 @@ use crate::time::Duration;
 #[macro_use]
 pub(crate) mod local;
 
-<<<<<<< HEAD
 #[stable(feature = "scoped_threads", since = "1.63.0")]
-mod scoped;
-=======
-#[unstable(feature = "scoped_threads", issue = "93203")]
 pub(crate) mod scoped;
->>>>>>> 7bdd99fc6a2 (Finished multithreading for WASIX)
 
 #[stable(feature = "scoped_threads", since = "1.63.0")]
 pub use scoped::{scope, Scope, ScopedJoinHandle};
@@ -206,8 +201,7 @@ pub use self::local::{AccessError, LocalKey};
 // static is sufficient.
 
 #[unstable(feature = "libstd_thread_internals", issue = "none")]
-#[cfg(target_thread_local)]
-#[cfg(not(test))]
+#[cfg(all(target_thread_local, not(target_vendor = "wasmer"), not(test)))]
 #[doc(hidden)]
 pub use self::local::fast::Key as __FastLocalKeyInner;
 #[unstable(feature = "libstd_thread_internals", issue = "none")]
