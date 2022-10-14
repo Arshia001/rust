@@ -64,10 +64,7 @@ jobs:
 
   build-rust:
     needs: build-libc
-    strategy:
-      matrix:
-        os: [self-hosted-ubuntu, macos-12, windows-latest]
-    runs-on: ${{ matrix.os }}
+    runs-on: self-hosted-ubuntu
     steps:
 
       - name: Download wasix-libc artifact
@@ -81,7 +78,7 @@ jobs:
           path: wasix-rust
           submodules: 'recursive'
           # Don't clean so downloaded LLVM etc can be reused.
-          clean: false
+          clean: 'false'
 
       # We need the full history for the main repo so the build tooling can
       # determine the cached LLVM download.
