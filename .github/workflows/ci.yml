@@ -64,10 +64,7 @@ jobs:
 
   build-rust:
     needs: build-libc
-    strategy:
-      matrix:
-        os: [self-hosted-ubuntu, macos-12, windows-latest]
-    runs-on: ${{ matrix.os }}
+    runs-on: self-hosted-ubuntu
     steps:
 
       - name: Download wasix-libc artifact
@@ -81,7 +78,7 @@ jobs:
           path: wasix-rust
           submodules: 'recursive'
           # Don't clean so downloaded LLVM etc can be reused.
-          clean: false
+          clean: 'false'
 
       # We need the full history for the main repo so the build tooling can
       # determine the cached LLVM download.
@@ -110,14 +107,12 @@ jobs:
 
       - name: Setup (Ubuntu)
         shell: bash
-        if: matrix.os == 'self-hosted-ubuntu' || matrix.os == 'ubuntu-latest'
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential curl wget xz-utils git python3 ninja-build cmake
 
       - name: Build (Linux)
         shell: bash
-        if: matrix.os == 'self-hosted-ubuntu'
         env:
           WASIX_NO_UPDATE_REPOS: '1'
           WASIX_COMPONENTS: rust
@@ -130,7 +125,6 @@ jobs:
 
       - name: Archive build output (Linux)
         uses: actions/upload-artifact@v3
-        if: matrix.os == 'self-hosted-ubuntu'
         with:
           name: rust-toolchain-x86_64-unknown-linux-gnu
           path: |
