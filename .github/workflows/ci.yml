@@ -201,35 +201,35 @@ jobs:
 
       # Windows
 
-      - name: Set up MinGW
-        uses: egor-tensin/setup-mingw@v2
-        if: matrix.os == 'windows-2019'
+      # - name: Set up MinGW
+      #   uses: egor-tensin/setup-mingw@v2
+      #   if: matrix.os == 'windows-2019'
       
-      - name: Install ninja
-        if: matrix.os == 'windows-2019'
-        uses: seanmiddleditch/gha-setup-ninja@master
+      # - name: Install ninja
+      #   if: matrix.os == 'windows-2019'
+      #   uses: seanmiddleditch/gha-setup-ninja@master
 
-      - name: Build (Windows)
-        shell: bash
-        if: matrix.os == 'windows-2019'
-        # TODO: remove once Windows is validated!
-        continue-on-error: true
-        env:
-          WASIX_NO_UPDATE_REPOS: '1'
-          WASIX_COMPONENTS: rust
-          # WASIX_RUST_HOST: x86_64-pc-windows-gnu
-          WASIX_RUST_HOST: x86_64-pc-windows-msvc
-        run: |
-          cd cargo-wasix
-          # NOTE: must unset GITHUB_ACTIONS env var, because Rst bootstrap checks for it.
-          # (see bootstrap config.rs)
-          GITHUB_ACTIONS=false WASIX_BUILD_DIR=$GITHUB_WORKSPACE cargo run -- wasix build-toolchain
+      # - name: Build (Windows)
+      #   shell: bash
+      #   if: matrix.os == 'windows-2019'
+      #   # TODO: remove once Windows is validated!
+      #   continue-on-error: true
+      #   env:
+      #     WASIX_NO_UPDATE_REPOS: '1'
+      #     WASIX_COMPONENTS: rust
+      #     # WASIX_RUST_HOST: x86_64-pc-windows-gnu
+      #     WASIX_RUST_HOST: x86_64-pc-windows-msvc
+      #   run: |
+      #     cd cargo-wasix
+      #     # NOTE: must unset GITHUB_ACTIONS env var, because Rst bootstrap checks for it.
+      #     # (see bootstrap config.rs)
+      #     GITHUB_ACTIONS=false WASIX_BUILD_DIR=$GITHUB_WORKSPACE cargo run -- wasix build-toolchain
 
-      - name: Archive build output (Windows)
-        uses: actions/upload-artifact@v3
-        if: matrix.os == 'windows-2019'
-        with:
-          name: rust-toolchain-x86_64-pc-windows-msvc
-          path: |
-            wasix-rust/build/x86_64-pc-windows-msvc/stage2
-            !wasix-rust/build/x86_64-pc-windows-msvc/stage2/lib/rustlib/src
+      # - name: Archive build output (Windows)
+      #   uses: actions/upload-artifact@v3
+      #   if: matrix.os == 'windows-2019'
+      #   with:
+      #     name: rust-toolchain-x86_64-pc-windows-msvc
+      #     path: |
+      #       wasix-rust/build/x86_64-pc-windows-msvc/stage2
+      #       !wasix-rust/build/x86_64-pc-windows-msvc/stage2/lib/rustlib/src
