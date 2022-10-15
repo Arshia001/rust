@@ -7,7 +7,7 @@ on:
   workflow_call:
 jobs:
   build-libc:
-    runs-on: self-hosted-ubuntu
+    runs-on: ubuntu-latest
     steps:
       - name: show git config
         run: |
@@ -64,10 +64,10 @@ jobs:
 
   build-rust:
     needs: build-libc
-    strategy:
-      matrix:
-        os: [self-hosted-ubuntu, macos-12, windows-latest]
-    runs-on: ${{ matrix.os }}
+    # strategy:
+    #   matrix:
+    #     os: [self-hosted-ubuntu, macos-12, windows-2019]
+    runs-on: windows-2019
     steps:
 
       - name: Download wasix-libc artifact
@@ -201,9 +201,15 @@ jobs:
 
       # Windows
 
+      - name: Set up MinGW
+        uses: egor-tensin/setup-mingw@v2
+        #FIXME: uncomment
+        #if: matrix.os == 'windows-2019'
+
       - name: Build (Windows)
         shell: bash
-        if: matrix.os == 'windows-latest'
+        #FIXME: uncomment
+        #if: matrix.os == 'windows-2019'
         # TODO: remove once Windows is validated!
         continue-on-error: true
         env:
@@ -219,7 +225,8 @@ jobs:
 
       - name: Archive build output (Windows)
         uses: actions/upload-artifact@v3
-        if: matrix.os == 'windows-latest'
+        #FIXME: uncomment
+        #if: matrix.os == 'windows-2019'
         with:
           name: rust-toolchain-x86_64-pc-windows-msvc
           path: |
