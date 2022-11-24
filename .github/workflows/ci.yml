@@ -69,10 +69,10 @@ jobs:
     needs: build-libc
     strategy:
       matrix:
-        os: [ubuntu-latest-4-cores, macos-12, windows-latest-4-cores]
+        os: [ubuntu-latest-4-cores, macos-12, windows-latest-8-cores]
         arch: [x86, aarch64]
         exclude:
-          - os: windows-latest-4-cores
+          - os: windows-latest-8-cores
             arch: aarch64
           - os: ubuntu-latest-4-cores
             arch: aarch64
