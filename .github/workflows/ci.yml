@@ -69,7 +69,7 @@ jobs:
     needs: build-libc
     strategy:
       matrix:
-        os: [self-hosted-ubuntu, macos-12, self-hosted-windows]
+        os: [ubuntu-latest-8-cores, macos-12, windows-latest-8-cores]
         arch: [x86, aarch64]
         exclude:
           - os: windows-latest-8-cores
