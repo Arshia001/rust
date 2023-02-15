@@ -7,7 +7,7 @@ on:
   workflow_call:
 jobs:
   build-libc:
-    runs-on: self-hosted-ubuntu
+    runs-on: ubuntu-latest-8-cores
     steps:
       - name: show git config
         run: |
@@ -72,21 +72,19 @@ jobs:
         os: [self-hosted-ubuntu, macos-12, self-hosted-windows]
         arch: [x86, aarch64]
         exclude:
-          - os: windows-2019
+          - os: windows-latest-8-cores
             arch: aarch64
-          - os: self-hosted-windows
+          - os: windows-latest-8-cores
             arch: aarch64
-          - os: self-hosted-ubuntu
+          - os: ubuntu-latest-8-cores
             arch: aarch64
-          - os: ubuntu-latest
+          - os: ubuntu-latest-8-cores
             arch: aarch64
-
-
     runs-on: ${{ matrix.os }}
     steps:
       - name: Install Rust
         uses: actions-rs/toolchain@v1
-        if: matrix.os != 'self-hosted-windows'
+        if: ${{ !contains(matrix.os, 'windows') }}
         with:
             toolchain: stable
 
@@ -126,14 +124,14 @@ jobs:
       # Linux!
 
       - name: Setup (Ubuntu)
-        if: matrix.arch == 'x86' && (matrix.os == 'self-hosted-ubuntu' || matrix.os == 'ubuntu-latest')
+        if: matrix.arch == 'x86' && contains(matrix.os, 'ubuntu')
         shell: bash
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential curl wget xz-utils git python3 ninja-build cmake
 
       - name: Build (Linux)
-        if: matrix.arch == 'x86' && (matrix.os == 'self-hosted-ubuntu' || matrix.os == 'ubuntu-latest')
+        if: matrix.arch == 'x86' && contains(matrix.os, 'ubuntu')
         shell: bash
         env:
           WASIX_NO_UPDATE_REPOS: '1'
@@ -147,7 +145,7 @@ jobs:
 
       - name: Archive build output (Linux)
         uses: actions/upload-artifact@v3
-        if: matrix.os == 'self-hosted-ubuntu' || matrix.os == 'ubuntu-latest'
+        if: contains(matrix.os, 'ubuntu')
         with:
           name: rust-toolchain-x86_64-unknown-linux-gnu
           path: |
@@ -158,7 +156,7 @@ jobs:
 
       - name: Setup (Mac OS)
         shell: bash
-        if: matrix.os == 'macos-12'
+        if: contains(matrix.os, 'macos')
         run: |
           brew update
           # Need ninja for building llvm (for aarch64 cross compile)
@@ -166,7 +164,7 @@ jobs:
 
       - name: Build (Mac Os, x86)
         shell: bash
-        if: matrix.os == 'macos-12' && matrix.arch == 'x86'
+        if: contains(matrix.os, 'macos-12') && matrix.arch == 'x86'
         env:
           WASIX_NO_UPDATE_REPOS: '1'
           GITHUB_ACTIONS: 'false'
@@ -180,7 +178,7 @@ jobs:
 
       - name: Archive build output (Mac OS - x86)
         uses: actions/upload-artifact@v3
-        if: matrix.os == 'macos-12' && matrix.arch == 'x86'
+        if: contains(matrix.os, 'macos') && matrix.arch == 'x86'
         with:
           name: rust-toolchain-x86_64-apple-darwin
           path: |
@@ -191,7 +189,7 @@ jobs:
 
       - name: Build (Mac Os, aarch64)
         shell: bash
-        if: matrix.os == 'macos-12' && matrix.arch == 'aarch64'
+        if: contains(matrix.os, 'macos-12') && matrix.arch == 'aarch64'
         env:
           WASIX_NO_UPDATE_REPOS: '1'
           GITHUB_ACTIONS: 'false'
@@ -205,7 +203,7 @@ jobs:
 
       - name: Archive build output (Mac OS - aarch64)
         uses: actions/upload-artifact@v3
-        if: matrix.os == 'macos-12' && matrix.arch == 'aarch64'
+        if: contains(matrix.os, 'macos-12') && matrix.arch == 'aarch64'
         with:
           name: rust-toolchain-aarch64-apple-darwin
           path: |
@@ -215,13 +213,13 @@ jobs:
       # Windows
 
       - name: Install chocolatey deps (Windows)
-        if: (matrix.os == 'self-hosted-windows') && matrix.arch == 'x86'
+        if: contains(matrix.os, 'windows') && matrix.arch == 'x86'
         shell: bash
         run:
           choco install -y git python3 visualstudio2019community cmake 
 
       - name: Set up MinGW (Windows)
-        if: (matrix.os == 'windows-2019') && matrix.arch == 'x86'
+        if: contains(matrix.os, 'windows') && matrix.arch == 'x86'
         uses: egor-tensin/setup-mingw@v2
 
       # - name: Install llvm (Windows)
@@ -231,11 +229,11 @@ jobs:
       #     version: "10.0"
 
       - name: Install ninja (Windows)
-        if: (matrix.os == 'windows-2019') && matrix.arch == 'x86'
+        if: contains(matrix.os, 'windows') && matrix.arch == 'x86'
         uses: seanmiddleditch/gha-setup-ninja@master
 
       - name: Build (Windows)
-        if: (matrix.os == 'windows-2019' || matrix.os == 'self-hosted-windows' ) && matrix.arch == 'x86'
+        if: contains(matrix.os, 'windows') && matrix.arch == 'x86'
         continue-on-error: true
         shell: bash
         env:
@@ -250,7 +248,7 @@ jobs:
           GITHUB_ACTIONS=false WASIX_BUILD_DIR=$GITHUB_WORKSPACE cargo run -- wasix build-toolchain
 
       - name: Archive build output (Windows)
-        if: (matrix.os == 'windows-2019' || matrix.os == 'self-hosted-windows' ) && matrix.arch == 'x86'
+        if: contains(matrix.os, 'windows') && matrix.arch == 'x86'
         uses: actions/upload-artifact@v3
         with:
           # name: rust-toolchain-x86_64-pc-windows-msvc
