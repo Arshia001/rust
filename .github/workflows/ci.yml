@@ -151,6 +151,7 @@ jobs:
           path: |
             wasix-rust/build/x86_64-unknown-linux-gnu/stage2
             !wasix-rust/build/x86_64-unknown-linux-gnu/stage2/lib/rustlib/src
+            !wasix-rust/build/x86_64-unknown-linux-gnu/stage2/lib/rustlib/rustc-src
 
       # Mac - x86
 
@@ -184,6 +185,7 @@ jobs:
           path: |
             wasix-rust/build/x86_64-apple-darwin/stage2
             !wasix-rust/build/x86_64-apple-darwin/stage2/lib/rustlib/src
+            !wasix-rust/build/x86_64-apple-darwin/stage2/lib/rustlib/rustc-src
 
       # Mac - aarch64
 
@@ -209,6 +211,7 @@ jobs:
           path: |
             wasix-rust/build/aarch64-apple-darwin/stage2
             !wasix-rust/build/aarch64-apple-darwin/stage2/lib/rustlib/src
+            !wasix-rust/build/aarch64-apple-darwin/stage2/lib/rustlib/rustc-src
 
       # Windows
 
@@ -256,3 +259,4 @@ jobs:
           path: |
             wasix-rust/build/x86_64-pc-windows-gnu/stage2
             !wasix-rust/build/x86_64-pc-windows-gnu/stage2/lib/rustlib/src
+            !wasix-rust/build/x86_64-pc-windows-gnu/stage2/lib/rustlib/rustc-src
